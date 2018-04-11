@@ -5,3 +5,35 @@ var color = {
         return this.colorList[Math.floor(Math.random() * this.colorList.length)];
     }
 };
+
+var matrix = {
+    matrixList: [
+        //one block
+        [[1]],
+        //row
+        [[1,1,1,1,1]],
+        [[1,1,1,1]],
+        [[1,1,1]],
+        [[1,1]],
+        //column
+        [[1],[1],[1],[1],[1]],
+        [[1],[1],[1],[1]],
+        [[1],[1],[1]],
+        [[1],[1]],
+        //2*2 blocks
+        [[1,1],[1,1]],
+        [[1,1],[1,0]],
+        [[1,1],[0,1]],
+        [[1,0],[1,1]],
+        [[0,1],[1,1]],
+        //3*3 blocks
+        [[1,1,1],[1,1,1],[1,1,1]],
+        [[1,1,1],[1,0,0],[1,0,0]],
+        [[1,1,1],[0,0,1],[0,0,1]],
+        [[1,0,0],[1,0,0],[1,1,1]],
+        [[0,0,1],[0,0,1],[1,1,1]]
+    ],
+    random: function() {
+        return this.matrixList[Math.floor(Math.random() * this.matrixList.length)];
+    }
+};
