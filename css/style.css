@@ -1,6 +1,8 @@
 * {
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 #title {
@@ -40,44 +42,4 @@
 #bricks {
     position: relative;
     margin: 10px auto;
-}
-
-.c1 {
-    background-color: #7B68EE;
-}
-
-.c2 {
-    background-color: #FFD700;
-}
-
-.c3 {
-    background-color: #FFA500;
-}
-
-.c4 {
-    background-color: #FF3E96;
-}
-
-.c5 {
-    background-color: #CD4F39;
-}
-
-.c6 {
-    background-color: #76EE00;
-}
-
-.c7 {
-    background-color: #48D1CC;
-}
-
-.c8 {
-    background-color: #3CB371;
-}
-
-.c9 {
-    background-color: #00B2EE;
-}
-
-.default {
-    background-color: #DDDDDD;
 }

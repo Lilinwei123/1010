@@ -38,6 +38,7 @@ var matrix = {
     }
 };
 
+
 var page = {
     event: function(evt) {
         var ev = evt || window.event;
@@ -60,25 +61,26 @@ var page = {
         var e = this.event(evt);
         return e.layerY || e.offsetY;
     }
-};
+}
 
 var param = {
-    // 移动的游戏块
-    dragBrick: null,
-    // 被选中的游戏块进行记录
-    currentBrick: null,
-    // 触摸位置在游戏块中的位置
-    x: null,
-    y: null
+    //移动的brick
+    dragBrick:null,
+    //选中的brick
+    currentBrick:null,
+    //触摸位置在dragBrick中位置，用于移动计算绝对位置
+    x:null,
+    y:null
 };
 
-function getPosition (e) {
-    var x = 0, 
+
+function getPosition(e) {
+    var x = 0,
         y = 0;
-        while (e != null) {
-            x += e.offsetLeft;
-            y += e.offsetTop;
-            e = e.offsetParent;
-        }
-    return {x: x, y: y};
+    while (e != null) {
+        x += e.offsetLeft;
+        y += e.offsetTop;
+        e = e.offsetParent;
+    }
+    return { x: x, y: y };
 }

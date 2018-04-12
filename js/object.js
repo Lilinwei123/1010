@@ -1,8 +1,12 @@
-// 网格中的每一个小方块单元格
-function Square(color, id, top, left, length, fatherDom) {
+/**
+ * 最小单元:方块
+ */
+function Square(id, color, fatherDom, length, top, left) {
+    // this.color = color;
     this.dom = document.createElement('div');
-    this.dom.style.background = color;
     this.dom.id = id;
+    this.dom.className = color;
+    this.dom.style.background = color;
     this.dom.style.width = length * 0.9 + 'px';
     this.dom.style.height = length * 0.9 + 'px';
     this.dom.style.top = top + 'px';
@@ -12,82 +16,150 @@ function Square(color, id, top, left, length, fatherDom) {
     fatherDom.appendChild(this.dom);
 }
 
-// 网格
-function Table(gridWidth, row, col) {
-    this.squares = [];
-    this.dom = document.getElementById("table");
-    this.dom.style.width = gridWidth + 'px';
-    this.dom.style.height = gridWidth / col * row + 'px';
-
-    // 形成网格
-    for (let i = 0; i < row; i++) {
-        for (let j = 0; j < col; j++) {
-            this.squares.push(new Square(color.default, `c-${i}-${j}`, gridWidth / col * i, gridWidth / col * j, gridWidth / col, this.dom));
-        }
-    }
+Square.prototype.changeColor = function (color) {
+    this.dom.className = color;
+    this.dom.style.background = color;
 }
 
-// 游戏块
-function Brick(color, id, top, left, length, fatherDom, matrix, candrag) {
+/**
+ * 游戏块
+ */
+function Brick(id, color, matrix, fatherDom, length, left, top, canDrag) {
+    this.state = 1; //state 1 show,0 remove
+    this.matrix = matrix;
     this.squares = [];
+    this.color = color;
+    //dom
     this.dom = document.createElement('div');
     this.dom.id = id;
     this.dom.style.width = length + 'px';
     this.dom.style.height = length + 'px';
-    this.dom.style.top = top + 'px';
-    this.dom.style.left = left + 'px';
     this.dom.style.position = 'absolute';
-    this.matrix = matrix;
-    
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[i].length; j++) {
+    this.dom.style.left = left + 'px';
+    this.dom.style.top = top + 'px';
+    //create Squares
+    for (var i = 0; i < matrix.length; i++) {
+        for (var j = 0; j < matrix[0].length; j++) {
             if (matrix[i][j]) {
-                    this.squares.push(new Square(color, `c-${i}-${j}`, length / 5 * i, length / 5 * j, length / 5, this.dom));
+                this.squares.push(new Square('bs-' + i + '-' + j, this.color, this.dom, length / 5, length / 5 * i, length / 5 * j));
+            } else {
+
             }
         }
     }
-
     fatherDom.appendChild(this.dom);
-
-    if (candrag) {
+    if (canDrag) {
         var that = this;
-        // 判断是否支持触屏事件
-        if ("ontouchend" in document) {
-            this.dom.addEventListener('touchstart', function (e) {
-                
-                // 
+        // 判断该浏览器是否支持触屏事件
+        if ('ontouchend' in document) {
+            this.dom.addEventListener('touchstart', function(e) {
+                // 获取触屏事件对象
+                e = e.touches[0];
+                // 所选中的游戏块
                 param.currentBrick = that;
+                // 将被选中的小游戏块隐藏
                 that.hide();
-                param.dragBrick = new Brick('drag', that.color, getPosition(this).y, getPosition(this).x, tableWidth / tableRow * 5, document.body, that.matrix, false);
-                
-            }, false)
+                // 将被选中的游戏块变大，和上面网格一样大
+                param.dragBrick = new Brick('drag', that.color, that.matrix, document.body, gameWidth / tableCol * 5, getPosition(this).x, getPosition(this).y, false);
+                // 光标距离游戏块的距离：x, y
+                // page.pageX(e)==e.pageX:光标距离窗口的左边距
+                // getPosition(this).x == this.offsetLeft:游戏块距离左边的距离
+                param.x = page.pageX(e) - getPosition(this).x;
+                param.y = page.pageY(e) - getPosition(this).y;
+                document.addEventListener('touchmove', move, false);
+                document.addEventListener('touchend', up, false);
+            }, false);
+        } else {
+       
         }
+
     }
 }
 
-// 用于点击那一下，原来的小游戏块隐藏
-Brick.prototype.hide = function () {  
-    this.dom.style.visibility = "hidden";
-}
-
-// 
-Brick.prototype.remove = function () {
+//移除
+Brick.prototype.remove = function() {
     this.state = 0;
     this.dom.parentNode.removeChild(this.dom);
 }
 
-Brick.prototype.show = function () {
+//隐藏
+Brick.prototype.hide = function() {
+    this.dom.style.visibility = 'hidden';
+}
+
+//展示
+Brick.prototype.show = function() {
     this.dom.style.visibility = '';
 }
 
-// 游戏块列表
-function BrickList (gridWidth, num) {
-    this.list = [];
-    this.dom = document.getElementById("bricks");
-    this.dom.style.width = gridWidth + 'px';
-    this.dom.style.height = gridWidth / num + 'px';
 
-    for (let i = 0; i < num; i++) {
-        this.list[i] = new Brick(color.random(), `b-${i}`, 0, gridWidth / num * i, gridWidth / num * 0.9, this.dom, matrix.random(), true);
+/**
+ * 游戏块列表
+ */
+function BrickList(gameWidth, brickAmout) {
+    this.list = [];
+    // this.amount = brickAmout;
+    this.dom = document.getElementById('bricks');
+    this.dom.style.width = gameWidth + 'px';
+    this.dom.style.height = gameWidth / brickAmout + 'px';
+
+    for (var i = 0; i < brickAmout; i++) {
+        this.list[i] = new Brick('b' + '-' + i, color.random(), matrix.random(), this.dom, gameWidth / brickAmout * 0.9, gameWidth / brickAmout * i, 0, true); //0.9防止相邻两个brick相连
     }
 }
+
+/**
+ * 棋盘
+ */
+function Table(gameWidth, row, col) {
+    // matrix标记的是网格中是否已经放入游戏快，1和0表示
+    this.matrix = [];
+    this.squares = [];
+    this.dom = document.getElementById('table');
+    this.dom.style.width = gameWidth + 'px';
+    this.dom.style.height = gameWidth / col * row + 'px';
+    //生成网格，已经网格对应的而为矩阵
+    for (var i = 0; i < row; i++) {
+        this.matrix[i] = [];
+        for (var j = 0; j < col; j++) {
+            this.matrix[i][j] = 0;
+            this.squares.push(new Square('t-' + i + '-' + j, color.default, this.dom, gameWidth / col, gameWidth / col * i, gameWidth / col * j));
+        }
+    }
+}
+
+// 拖拽的游戏快，拖拽游戏块的开始坐标
+Table.prototype.checkNoCover = function (brick, i, j) {
+    var result = [];
+
+    // 判断游戏快在该位置是否放得下,尾部添加是否放得下，头部不起作用
+    if (i + brick.matrix.length > this.matrix.length || j + brick.matrix[0].length > this.matrix[0].length) {
+        return false;
+    }
+
+    for (let n = 0; n < brick.matrix.length; n++) {
+        for (let m = 0; m < brick.matrix[0].length; m++) {
+            // 判断是否放得下
+            if (this.matrix[i + n][j + m] && brick.matrix[n][m]) {
+                return false;
+            } 
+
+            if (brick.matrix[n][m]) {
+                result.push([i+n, j+m]);
+            }
+        }
+    }
+    return result;
+}
+
+
+Table.prototype.update = function (positionList, color) {
+    for (let i = 0; i < positionList.length; i++) {
+        // 记录网格中的一个小方块是否已经放入游戏快
+        this.matrix[positionList[i][0]][positionList[i][1]] = 1;
+        // 更新游戏色块
+        this.squares[positionList[i][1]  + positionList[i][0] * tableCol].changeColor(color);
+    }
+}
+
+// 判断游戏快在棋盘上是否放得下
