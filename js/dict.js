@@ -37,3 +37,48 @@ var matrix = {
         return this.matrixList[Math.floor(Math.random() * this.matrixList.length)];
     }
 };
+
+var page = {
+    event: function(evt) {
+        var ev = evt || window.event;
+        return ev;
+    },
+    pageX: function(evt) {
+        var e = this.event(evt);
+        return e.pageX || (e.clientX + document.body.scrollLeft - document.body.clientLeft);
+    },
+    pageY: function(evt) {
+        var e = this.event(evt);
+        return e.pageY || (e.clientY + document.body.scrollTop - document.body.clientTop);
+
+    },
+    layerX: function(evt) {
+        var e = this.event(evt);
+        return e.layerX || e.offsetX;
+    },
+    layerY: function(evt) {
+        var e = this.event(evt);
+        return e.layerY || e.offsetY;
+    }
+};
+
+var param = {
+    // 移动的游戏块
+    dragBrick: null,
+    // 被选中的游戏块进行记录
+    currentBrick: null,
+    // 触摸位置在游戏块中的位置
+    x: null,
+    y: null
+};
+
+function getPosition (e) {
+    var x = 0, 
+        y = 0;
+        while (e != null) {
+            x += e.offsetLeft;
+            y += e.offsetTop;
+            e = e.offsetParent;
+        }
+    return {x: x, y: y};
+}

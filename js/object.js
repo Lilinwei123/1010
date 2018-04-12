@@ -28,7 +28,7 @@ function Table(gridWidth, row, col) {
 }
 
 // 游戏块
-function Brick(color, id, top, left, length, fatherDom, matrix) {
+function Brick(color, id, top, left, length, fatherDom, matrix, candrag) {
     this.squares = [];
     this.dom = document.createElement('div');
     this.dom.id = id;
@@ -38,8 +38,7 @@ function Brick(color, id, top, left, length, fatherDom, matrix) {
     this.dom.style.left = left + 'px';
     this.dom.style.position = 'absolute';
     this.matrix = matrix;
-    fatherDom.appendChild(this.dom);
-
+    
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
             if (matrix[i][j]) {
@@ -48,6 +47,37 @@ function Brick(color, id, top, left, length, fatherDom, matrix) {
         }
     }
 
+    fatherDom.appendChild(this.dom);
+
+    if (candrag) {
+        var that = this;
+        // 判断是否支持触屏事件
+        if ("ontouchend" in document) {
+            this.dom.addEventListener('touchstart', function (e) {
+                
+                // 
+                param.currentBrick = that;
+                that.hide();
+                param.dragBrick = new Brick('drag', that.color, getPosition(this).y, getPosition(this).x, tableWidth / tableRow * 5, document.body, that.matrix, false);
+                
+            }, false)
+        }
+    }
+}
+
+// 用于点击那一下，原来的小游戏块隐藏
+Brick.prototype.hide = function () {  
+    this.dom.style.visibility = "hidden";
+}
+
+// 
+Brick.prototype.remove = function () {
+    this.state = 0;
+    this.dom.parentNode.removeChild(this.dom);
+}
+
+Brick.prototype.show = function () {
+    this.dom.style.visibility = '';
 }
 
 // 游戏块列表
@@ -58,6 +88,6 @@ function BrickList (gridWidth, num) {
     this.dom.style.height = gridWidth / num + 'px';
 
     for (let i = 0; i < num; i++) {
-        this.list[i] = new Brick(color.random(), `b-${i}`, 0, gridWidth / num * i, gridWidth / num * 0.9, this.dom, matrix.random());
+        this.list[i] = new Brick(color.random(), `b-${i}`, 0, gridWidth / num * i, gridWidth / num * 0.9, this.dom, matrix.random(), true);
     }
 }
