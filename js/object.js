@@ -60,7 +60,7 @@ function Brick(id, color, matrix, fatherDom, length, left, top, canDrag) {
                 // 将被选中的小游戏块隐藏
                 that.hide();
                 // 将被选中的游戏块变大，和上面网格一样大
-                param.dragBrick = new Brick('drag', that.color, that.matrix, document.body, gameWidth / tableCol * 5, getPosition(this).x, getPosition(this).y, false);
+                param.dragBrick = new Brick(id, that.color, that.matrix, document.body, gameWidth / tableCol * 5, getPosition(this).x, getPosition(this).y, false);
                 // 光标距离游戏块的距离：x, y
                 // page.pageX(e)==e.pageX:光标距离窗口的左边距
                 // getPosition(this).x == this.offsetLeft:游戏块距离左边的距离
@@ -128,11 +128,11 @@ function Table(gameWidth, row, col) {
     }
 }
 
-// 拖拽的游戏快，拖拽游戏块的开始坐标
+// 计算拖拽的游戏块是否可以放置在网格中
 Table.prototype.checkNoCover = function (brick, i, j) {
     var result = [];
 
-    // 判断游戏快在该位置是否放得下,尾部添加是否放得下，头部不起作用
+    // 判断游戏快在该位置是否放得下,尾部添加是否放得下
     if (i + brick.matrix.length > this.matrix.length || j + brick.matrix[0].length > this.matrix[0].length) {
         return false;
     }
@@ -213,4 +213,20 @@ Table.prototype.clear = function (row, col) {
             }
         }
     }
+}
+
+Table.prototype.isOver = function(brickList) {
+    for (let i = 0; i < brickList.length; i++) {
+        if (brickList[i]) {
+            for (m = 0; m < this.matrix[0].length; m++) {
+                for (n = 0; n < this.matrix.length; n++) {
+                    // 遍历剩余的游戏块，一一判断是否还可以放置在网格中
+                    let result = this.checkNoCover(brickList[i], m, n);
+                    if (result)
+                        return result;
+                }
+            }
+        }
+    }
+    return false;
 }
