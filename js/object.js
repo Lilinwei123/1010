@@ -139,11 +139,13 @@ Table.prototype.checkNoCover = function (brick, i, j) {
 
     for (let n = 0; n < brick.matrix.length; n++) {
         for (let m = 0; m < brick.matrix[0].length; m++) {
-            // 判断是否放得下
+
+            // 判断是否放得下，降游戏快的每一个快与二维0，1矩阵进行一一比较
             if (this.matrix[i + n][j + m] && brick.matrix[n][m]) {
                 return false;
             } 
 
+            // 游戏快在网格中对应的位置
             if (brick.matrix[n][m]) {
                 result.push([i+n, j+m]);
             }
@@ -152,7 +154,7 @@ Table.prototype.checkNoCover = function (brick, i, j) {
     return result;
 }
 
-
+// 表格更新色块
 Table.prototype.update = function (positionList, color) {
     for (let i = 0; i < positionList.length; i++) {
         // 记录网格中的一个小方块是否已经放入游戏快
@@ -162,4 +164,53 @@ Table.prototype.update = function (positionList, color) {
     }
 }
 
-// 判断游戏快在棋盘上是否放得下
+// 行列判断是否满足消除条件，并且返回该消除的行和列
+Table.prototype.needClear = function () {
+    let rows = [],
+        cols = [];
+    // 行
+    for (let i = 0; i < this.matrix.length; i++) {
+        var sum = 0;
+        for (let j = 0; j < this.matrix[0].length; j++) {
+            sum += this.matrix[i][j];
+            if (sum == this.matrix[0].length) {
+                rows.push(i);
+            }
+        }
+    }
+    // 列,矩阵
+    for (let i = 0; i < this.matrix.length; i++) {
+        var sum = 0;
+        for (let j = 0; j < this.matrix[0].length; j++) {
+            sum += this.matrix[j][i];
+            if (sum == this.matrix.length) {
+                cols.push(i);
+            }
+        }
+    }
+    // console.log([rows, cols]);
+    return [rows, cols];
+}
+
+// 根据要消除的行和列，改变色块颜色
+Table.prototype.clear = function (row, col) {
+    // 行
+    if (row.length) {
+        for (let i = 0; i < row.length; i++) {
+            for (let j = 0; j < this.matrix[0].length; j++) {
+                // 消除后自动设置为0
+                this.matrix[row[i]][j] = 0;
+                this.squares[row[i] * this.matrix[0].length + j].changeColor(color.default);
+            }
+        }
+    }
+    // 列
+    if (col.length) {
+        for (let i = 0; i < this.matrix.length; i++) {
+            for (let j = 0; j < col.length; j++) {
+                this.matrix[i][col[j]] = 0;
+                this.squares[i * this.matrix.length + col[j]].changeColor(color.default);
+            }
+        }
+    }
+}
