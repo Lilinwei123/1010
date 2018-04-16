@@ -84,3 +84,5 @@ function getPosition(e) {
     }
     return { x: x, y: y };
 }
+
+var top;

@@ -53,6 +53,10 @@ function Brick(id, color, matrix, fatherDom, length, left, top, canDrag) {
         // 判断该浏览器是否支持触屏事件
         if ('ontouchend' in document) {
             this.dom.addEventListener('touchstart', function(e) {
+                // document.querySelector('body').addEventListener('touchstart', function (ev) {
+                //     event.preventDefault();
+                // });
+
                 // 获取触屏事件对象
                 e = e.touches[0];
                 // 所选中的游戏块
@@ -60,12 +64,19 @@ function Brick(id, color, matrix, fatherDom, length, left, top, canDrag) {
                 // 将被选中的小游戏块隐藏
                 that.hide();
                 // 将被选中的游戏块变大，和上面网格一样大
-                param.dragBrick = new Brick(id, that.color, that.matrix, document.body, gameWidth / tableCol * 5, getPosition(this).x, getPosition(this).y, false);
+                param.dragBrick = new Brick(id, that.color, that.matrix, document.body, gameWidth / tableCol * 5, getPosition(this).x, getPosition(this).y - 30, false);
                 // 光标距离游戏块的距离：x, y
                 // page.pageX(e)==e.pageX:光标距离窗口的左边距
                 // getPosition(this).x == this.offsetLeft:游戏块距离左边的距离
                 param.x = page.pageX(e) - getPosition(this).x;
-                param.y = page.pageY(e) - getPosition(this).y;
+                // param.y = page.pageY(e) - getPosition(this).y;
+
+                brickY = getPosition(this).y;
+                startY = e.pageY;
+
+
+                // param.y = page.pageY(e);
+                // top = getPosition(this).y;
                 document.addEventListener('touchmove', move, false);
                 document.addEventListener('touchend', up, false);
             }, false);

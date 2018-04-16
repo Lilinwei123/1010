@@ -1,9 +1,10 @@
 // 网格的总宽度
 var gameWidth = document.body.clientWidth < 520 ? (document.body.clientWidth - 50) : 500;
 
+
 // 初始化10 * 10网格
-var tableRow = 8;
-var tableCol = 8;
+var tableRow = 10;
+var tableCol = 10;
 var table = new Table(gameWidth, tableRow, tableCol);
 
 // 初始化游戏块
@@ -18,25 +19,47 @@ var score = 0;
 // 记录每次三个游戏快拖拽完成后生成新的游戏块
 var dragNum = 0;
 
+document.querySelector('body').addEventListener('touchmove', function (ev) {
+    ev.preventDefault();
+});
+
+window.addEventListener('touchmove', function (ev) {
+    ev.preventDefault();
+    return false;
+});
+
+document.querySelector('body').css('-webkit-overflow-scroll','hidden');
+
+// $('body').addEventListener('touchstart', function (ev) {
+// 	ev.preventDefault();
+// });
+
+
 // 游戏移动过程位置的变化
-function move (e) {
-    e.preventDefault();
+function move(e) {
+    
     if ('ontouchend' in document) {
         e = e.touches[0];
     }
-    
+
+    endY = e.pageY;
+
     // 鼠标的当前位置 - 鼠标距离游戏块的位置 = 游戏块移动后的位置
-    var moveX = page.pageX(e) - param.x,
-        moveY = page.pageY(e) - param.y;
+    var moveX = page.pageX(e) - param.x;
+        // moveY = endY + brickY - 30;
+        moveY = endY - startY + brickY -30;
+
+        
 
     param.dragBrick.dom.style.left = `${moveX}px`;
     param.dragBrick.dom.style.top = `${moveY}px`;
+    return false;
+  
 }
 
 
 // 游戏块移动结束处理,即判断游戏快所放的位置
 function up(e) {
-    e.preventDefault();
     if ('ontouchend' in document) {
         e = e.touches[0];
     }
@@ -68,7 +91,7 @@ function up(e) {
         brickList.list[brickIndex] = null;
 
         // 三个游戏块被拖拽完成后生成新的游戏块
-        if(dragNum === 3) {
+        if (dragNum === 3) {
             brickList = new BrickList(gameWidth, brickAmount);
             dragNum = 0;
         }
@@ -82,13 +105,13 @@ function up(e) {
             document.getElementById("score").innerHTML = score;
             // 清除可以消除的行和列
             table.clear(clearResult[0], clearResult[1]);
-        } 
+        }
 
         let isOver = table.isOver(brickList.list);
         if (!isOver) {
             document.getElementById("table").innerHTML = 'Game Over!';
             document.getElementById("bricks").style.display = 'none';
-        } 
+        }
     } else {
         param.currentBrick.show();
     }
