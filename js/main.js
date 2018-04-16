@@ -25,7 +25,7 @@ function move (e) {
         e = e.touches[0];
     }
     
-    // 计算出鼠标移动距离
+    // 鼠标的当前位置 - 鼠标距离游戏块的位置 = 游戏块移动后的位置
     var moveX = page.pageX(e) - param.x,
         moveY = page.pageY(e) - param.y;
 
