@@ -2,8 +2,8 @@
 var gameWidth = document.body.clientWidth < 520 ? (document.body.clientWidth - 50) : 500;
 
 // 初始化10 * 10网格
-var tableRow = 6;
-var tableCol = 6;
+var tableRow = 8;
+var tableCol = 8;
 var table = new Table(gameWidth, tableRow, tableCol);
 
 // 初始化游戏块
@@ -75,10 +75,12 @@ function up(e) {
         // 获取需要消除的行和列的二维数组
         let clearResult = table.needClear();
 
-        // 只要行和列满足消除条件，就讲对应行和列传参数
+        // 只要行和列满足消除条件，就将对应行和列传参数，
         if (clearResult[0].length || clearResult[1].length) {
-            score += 2;
+            // 计算分数
+            score += clearResult[0].length * 2 + clearResult[1].length * 2;
             document.getElementById("score").innerHTML = score;
+            // 清除可以消除的行和列
             table.clear(clearResult[0], clearResult[1]);
         } 
 
