@@ -13,6 +13,7 @@
 </head>
 
 <body ontouchmove="event.preventDefault()">
+    <!-- <body> -->
     <div class="game1010">
         <p id="scoreInfo">得分:
             <span id="score">0</span>
@@ -24,13 +25,24 @@
                 <span style="color: #CD2626;">!</span>
             </h1>
         </div>
-        <div id="table">
+
+        <div id="gameLayout">
+            <div id="table">
+            </div>
+
+            <div id="bricks">
+            </div>
         </div>
 
-        <div id="bricks">
+
+        <div id="gameOver">
+            <h1>Game Over!</h1>
+            <h3>总得分：
+                <span id="scoreEnd"></span>
+            </h3>
+            <div id="repeatButton">重新开始</div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/object.js"></script>
     <script type="text/javascript" src="js/dict.js"></script>
     <script type="text/javascript" src="js/main.js"></script>

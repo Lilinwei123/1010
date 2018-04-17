@@ -17,6 +17,7 @@ body{
 .game1010{
     position: relative;
     height: 100%;
+    min-height: 500px;
 }
 
 #title {
@@ -56,4 +57,27 @@ body{
 #bricks {
     position: relative;
     margin: 10px auto;
+}
+
+#gameOver{
+    display: none;
+    position: relative;
+    top: 100px;
+    text-align: center;
+    color: red;
+    height: 200px;
+}
+
+#repeatButton {
+    border: 1px solid #FFC125;
+    height: 30px;
+    width: 80px;
+    border-radius: 5px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #FFC125;
+    color: white;
+    margin: 0 auto;
+    position: relative;
+    top: 20px;
 }

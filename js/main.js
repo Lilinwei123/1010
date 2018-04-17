@@ -1,43 +1,67 @@
 // 网格的总宽度
-var gameWidth = document.body.clientWidth < 520 ? (document.body.clientWidth - 50) : 500;
+var gameWidth,
+    // 初始化10 * 10网格
+    tableRow,
+    tableCol,
+    table,
+
+    // 初始化游戏块
+    brickAmount,
+    brickList,
+
+    squareWidth,
+    // 记录得分情况
+    score = 0,
+
+    // 记录每次三个游戏快拖拽完成后生成新的游戏块
+    dragNum = 0;
 
 
-// 初始化10 * 10网格
-var tableRow = 10;
-var tableCol = 10;
-var table = new Table(gameWidth, tableRow, tableCol);
+function init() {
+    gameWidth = document.body.clientWidth < 520 ? (document.body.clientWidth - 50) : 500;
 
-// 初始化游戏块
-var brickAmount = 3;
-var brickList = new BrickList(gameWidth, brickAmount);
+    // 初始化tableRow * tableCol网格
+    tableRow = 10;
+    tableCol = 10;
+    table = new Table(gameWidth, tableRow, tableCol);
 
-var squareWidth = gameWidth / tableCol;
+    // 初始化游戏块
+    brickAmount = 3;
+    brickList = new BrickList(gameWidth, brickAmount);
 
-// 记录得分情况
-var score = 0;
+    squareWidth = gameWidth / tableCol;
 
-// 记录每次三个游戏快拖拽完成后生成新的游戏块
-var dragNum = 0;
+    // 记录得分情况
+    score = 0;
 
-document.querySelector('body').addEventListener('touchmove', function (ev) {
-    ev.preventDefault();
-});
+    // 记录每次三个游戏快拖拽完成后生成新的游戏块
+    dragNum = 0;
+}
 
-window.addEventListener('touchmove', function (ev) {
-    ev.preventDefault();
-    return false;
-});
+function restart() {
+    document.getElementById("gameLayout").style.display = 'none';
+    document.getElementById("gameOver").style.display = 'block';
+    document.getElementById("scoreEnd").innerHTML = score;
 
-document.querySelector('body').css('-webkit-overflow-scroll','hidden');
+    document.removeEventListener('touchmove', move, false);
+    document.getElementById("repeatButton").addEventListener("click", function (e) {
+        e.preventDefault();
+        table = null;
+        brickList = null;
+        score = 0;
+        // 清空原来的游戏块dom
+        document.getElementById("bricks").innerHTML = "";
 
-// $('body').addEventListener('touchstart', function (ev) {
-// 	ev.preventDefault();
-// });
+        document.getElementById("gameLayout").style.display = 'block';
+        document.getElementById("gameOver").style.display = 'none';
+        document.getElementById("score").innerHTML = 0;
 
+        init();
+    });
+}
 
 // 游戏移动过程位置的变化
 function move(e) {
-    
     if ('ontouchend' in document) {
         e = e.touches[0];
     }
@@ -46,15 +70,12 @@ function move(e) {
 
     // 鼠标的当前位置 - 鼠标距离游戏块的位置 = 游戏块移动后的位置
     var moveX = page.pageX(e) - param.x;
-        // moveY = endY + brickY - 30;
-        moveY = endY - startY + brickY -30;
-
-        
+    // moveY = endY + brickY - 30;
+    moveY = endY - startY + brickY - 30;
 
     param.dragBrick.dom.style.left = `${moveX}px`;
     param.dragBrick.dom.style.top = `${moveY}px`;
     return false;
-  
 }
 
 
@@ -63,7 +84,7 @@ function up(e) {
     if ('ontouchend' in document) {
         e = e.touches[0];
     }
-    // debugger
+
     var updatePostion = false;
     var dragPosition = getPosition(param.dragBrick.dom);
     var tablePosition = getPosition(table.dom);
@@ -104,13 +125,17 @@ function up(e) {
             score += clearResult[0].length * 2 + clearResult[1].length * 2;
             document.getElementById("score").innerHTML = score;
             // 清除可以消除的行和列
+            // table.clear(clearResult[0], clearResult[1]);
+
+            // setTimeout(function () {
             table.clear(clearResult[0], clearResult[1]);
+            // }, 100)
         }
 
         let isOver = table.isOver(brickList.list);
+        
         if (!isOver) {
-            document.getElementById("table").innerHTML = 'Game Over!';
-            document.getElementById("bricks").style.display = 'none';
+            restart();
         }
     } else {
         param.currentBrick.show();
@@ -122,3 +147,5 @@ function up(e) {
     document.addEventListener('touchmove', move);
     document.addEventListener('touchend', up);
 }
+
+init();

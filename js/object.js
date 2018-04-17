@@ -53,10 +53,6 @@ function Brick(id, color, matrix, fatherDom, length, left, top, canDrag) {
         // 判断该浏览器是否支持触屏事件
         if ('ontouchend' in document) {
             this.dom.addEventListener('touchstart', function(e) {
-                // document.querySelector('body').addEventListener('touchstart', function (ev) {
-                //     event.preventDefault();
-                // });
-
                 // 获取触屏事件对象
                 e = e.touches[0];
                 // 所选中的游戏块
@@ -86,6 +82,8 @@ function Brick(id, color, matrix, fatherDom, length, left, top, canDrag) {
 
     }
 }
+
+
 
 //移除
 Brick.prototype.remove = function() {
@@ -199,7 +197,7 @@ Table.prototype.needClear = function () {
             }
         }
     }
-    // console.log([rows, cols]);
+    
     return [rows, cols];
 }
 
@@ -211,7 +209,8 @@ Table.prototype.clear = function (row, col) {
             for (let j = 0; j < this.matrix[0].length; j++) {
                 // 消除后自动设置为0
                 this.matrix[row[i]][j] = 0;
-                this.squares[row[i] * this.matrix[0].length + j].changeColor(color.default);
+                let that = this;
+                that.squares[row[i] * that.matrix[0].length + j].changeColor(color.default);
             }
         }
     }
