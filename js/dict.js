@@ -1,6 +1,6 @@
 var color = {
-    default: '#DDDDDD',
-    colorList: ['#7B68EE', '#FFD700', '#FFA500', '#FF3E96', '#CD4F39', '#76EE00', '#48D1CC', '#3CB371', '#00B2EE'],
+    default: 'default',
+    colorList: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9'],
     random: function() {
         return this.colorList[Math.floor(Math.random() * this.colorList.length)];
     }

@@ -16,7 +16,6 @@ var gameWidth,
     // 记录每次三个游戏快拖拽完成后生成新的游戏块
     dragNum = 0;
 
-
 function init() {
     gameWidth = document.body.clientWidth < 520 ? (document.body.clientWidth - 50) : 500;
 
@@ -57,6 +56,10 @@ function restart() {
         document.getElementById("score").innerHTML = 0;
 
         init();
+    });
+
+    document.getElementById('gameMore').addEventListener("click", function(e) {
+        window.location.href = 'http://g.sina.cn/?vt=4';
     });
 }
 
@@ -124,12 +127,10 @@ function up(e) {
             // 计算分数
             score += clearResult[0].length * 2 + clearResult[1].length * 2;
             document.getElementById("score").innerHTML = score;
-            // 清除可以消除的行和列
-            // table.clear(clearResult[0], clearResult[1]);
-
-            // setTimeout(function () {
-            table.clear(clearResult[0], clearResult[1]);
-            // }, 100)
+        
+            setTimeout(function () {
+                table.clear(clearResult[0], clearResult[1])
+            }, 100);
         }
 
         let isOver = table.isOver(brickList.list);

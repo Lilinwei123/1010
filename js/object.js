@@ -2,11 +2,9 @@
  * 最小单元:方块
  */
 function Square(id, color, fatherDom, length, top, left) {
-    // this.color = color;
     this.dom = document.createElement('div');
     this.dom.id = id;
     this.dom.className = color;
-    this.dom.style.background = color;
     this.dom.style.width = length * 0.9 + 'px';
     this.dom.style.height = length * 0.9 + 'px';
     this.dom.style.top = top + 'px';
@@ -18,7 +16,7 @@ function Square(id, color, fatherDom, length, top, left) {
 
 Square.prototype.changeColor = function (color) {
     this.dom.className = color;
-    this.dom.style.background = color;
+    let that = this; 
 }
 
 /**
@@ -209,8 +207,7 @@ Table.prototype.clear = function (row, col) {
             for (let j = 0; j < this.matrix[0].length; j++) {
                 // 消除后自动设置为0
                 this.matrix[row[i]][j] = 0;
-                let that = this;
-                that.squares[row[i] * that.matrix[0].length + j].changeColor(color.default);
+                this.squares[row[i] * this.matrix[0].length + j].changeColor(color.default);
             }
         }
     }

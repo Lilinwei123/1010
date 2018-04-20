@@ -9,6 +9,7 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style">
     <meta content="telephone=no" name="format-detection">
     <title>1010DOM</title>
+    <link rel="stylesheet" type="text/css" href="http://mjs.sinaimg.cn/wap/module/share_2.0/201612281441/css/addShare.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
@@ -26,7 +27,7 @@
             </h1>
         </div>
 
-        <div id="gameLayout">
+        <div id="gameLayout" style="display: none">
             <div id="table">
             </div>
 
@@ -40,9 +41,19 @@
             <h3>总得分：
                 <span id="scoreEnd"></span>
             </h3>
-            <div id="repeatButton">重新开始</div>
+            <div class="button" id="repeatButton">重新开始</div>
+            <div class="button j_shareBtn">分享</div>
+            <div class="button" id="gameMore">更多游戏</div>
         </div>
     </div>
+
+
+    <script type="text/javascript" src="http://mjs.sinaimg.cn/wap/module/base/js/zepto.min.js"></script>
+    <script type="text/javascript" scr="http://mjs.sinaimg.cn/wap/public/suda/201601071000/suda_log.min.js"></script>
+    <script type="text/javascript" src="http://mjs.sinaimg.cn/wap/public/suda/201601071000/suda_map.min.js"></script>
+    <script type="text/javascript" src="http://mjs.sinaimg.cn/wap/module/login/201707060712/outlogin_layer_mobile.min.js"></script>
+    <script type="text/javascript" src="http://mjs.sinaimg.cn/wap/module/share_2.0/201612281441/js/addShare.min.js"></script>
+
     <script type="text/javascript" src="js/object.js"></script>
     <script type="text/javascript" src="js/dict.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
