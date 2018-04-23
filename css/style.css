@@ -60,7 +60,7 @@ body{
 }
 
 #gameOver{
-    /* display: none; */
+    display: none;
     position: relative;
     top: 100px;
     text-align: center;
